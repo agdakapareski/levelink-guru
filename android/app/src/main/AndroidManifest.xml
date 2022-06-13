@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.lastproject.levelink_guru">
+    <uses-permission android:name="android.permission.INTERNET"/>
    <application
         android:label="levelink-guru"
         android:name="${applicationName}"

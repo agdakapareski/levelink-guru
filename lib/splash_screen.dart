@@ -47,7 +47,7 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Center(
           child: Image.asset(
             'Levelink-guru.png',
-            height: 40,
+            height: 50,
           ),
         ),
       ),
