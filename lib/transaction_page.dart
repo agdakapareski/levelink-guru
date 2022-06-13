@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:levelink_guru/list_data.dart';
+import 'package:levelink_guru/model/transaksi_model.dart';
+import 'package:levelink_guru/providers/jadwal_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:levelink_guru/custom_theme.dart';
 import 'package:levelink_guru/providers/cart_provider.dart';
@@ -22,6 +26,7 @@ class _TransactionPageState extends State<TransactionPage> {
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context);
+    final jadwalprovider = Provider.of<JadwalProvider>(context);
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -68,89 +73,20 @@ class _TransactionPageState extends State<TransactionPage> {
                               //   (element) => element.cart!.status! == 'requested',
                               // )
                               .isNotEmpty
-                          ? Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: cartProvider.transaksi
-                                  // .where(
-                                  //   (element) =>
-                                  //       element.cart!.status! == 'requested',
-                                  // )
-                                  .map(
-                                    (transaksi) => Container(
-                                      decoration: const BoxDecoration(
-                                        border: Border(
-                                          bottom: BorderSide(
-                                            color: Color(0xFFEEEEEE),
-                                          ),
-                                        ),
-                                      ),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          const SizedBox(
-                                            height: 16,
-                                          ),
-                                          PaddedWidget(
-                                            child: Row(
-                                              children: [
-                                                Text(
-                                                  transaksi.cart!.siswa!.nama!,
-                                                  style: const TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                                const Spacer(),
-                                                Text(
-                                                  transaksi.cart!.status!,
-                                                  style: TextStyle(
-                                                    color: transaksi.cart!
-                                                                .status! ==
-                                                            'requested'
-                                                        ? Colour.red
-                                                        : Colour.blue,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          PaddedWidget(
-                                            child: ListView(
-                                              physics:
-                                                  const NeverScrollableScrollPhysics(),
-                                              shrinkWrap: true,
-                                              children: transaksi.kelas!
-                                                  .map(
-                                                    (kelas) => Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                        top: 5,
-                                                      ),
-                                                      child: Row(
-                                                        children: [
-                                                          Text(
-                                                            kelas.mataPelajaran!
-                                                                .mataPelajaran!,
-                                                          ),
-                                                          const Spacer(),
-                                                          Text(
-                                                            '${kelas.hari!}, ${kelas.jam!}',
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  )
-                                                  .toList(),
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: 16,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  )
-                                  .toList(),
+                          ? ListView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: cartProvider.transaksi
+                                  .where((element) =>
+                                      element.cart!.status == 'requested')
+                                  .length,
+                              itemBuilder: (context, index) {
+                                return transactionList(
+                                  cartProvider,
+                                  jadwalprovider,
+                                  index,
+                                );
+                              },
                             )
                           : PaddedWidget(
                               child: Column(
@@ -220,4 +156,96 @@ class _TransactionPageState extends State<TransactionPage> {
       ),
     );
   }
+}
+
+transactionList(
+    CartProvider cartProvider, JadwalProvider jadwalProvider, index) {
+  return Slidable(
+    endActionPane: ActionPane(motion: const DrawerMotion(), children: [
+      SlidableAction(
+        onPressed: (context) async {
+          jadwalProvider.storeJadwal(cartProvider.transaksi[index], currentid!);
+        },
+        backgroundColor: Colour.blue,
+        foregroundColor: Colors.white,
+        icon: Icons.done,
+        label: 'Accept',
+      ),
+      SlidableAction(
+        onPressed: (context) {},
+        backgroundColor: Colour.red,
+        foregroundColor: Colors.white,
+        icon: Icons.clear,
+        label: 'Reject',
+      ),
+    ]),
+    child: Container(
+      decoration: const BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: Color(0xFFEEEEEE),
+          ),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(
+            height: 16,
+          ),
+          PaddedWidget(
+            child: Row(
+              children: [
+                Text(
+                  cartProvider.transaksi[index].cart!.siswa!.nama!,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const Spacer(),
+                Text(
+                  cartProvider.transaksi[index].cart!.status!,
+                  style: TextStyle(
+                    color: cartProvider.transaksi[index].cart!.status! ==
+                            'requested'
+                        ? Colour.red
+                        : Colour.blue,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          PaddedWidget(
+            child: ListView(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              children: cartProvider.transaksi[index].kelas!
+                  .map(
+                    (kelas) => Padding(
+                      padding: const EdgeInsets.only(
+                        top: 5,
+                      ),
+                      child: Row(
+                        children: [
+                          Text(
+                            kelas.mataPelajaran!.mataPelajaran!,
+                          ),
+                          const Spacer(),
+                          Text(
+                            '${kelas.hari!}, ${kelas.jam!}',
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+        ],
+      ),
+    ),
+  );
 }

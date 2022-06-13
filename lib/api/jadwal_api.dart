@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -7,6 +9,7 @@ import 'package:levelink_guru/model/jadwal_model.dart';
 import 'package:levelink_guru/model/kelas_model.dart';
 import 'package:levelink_guru/model/mata_pelajaran_model.dart';
 import 'package:levelink_guru/model/siswa_model.dart';
+import 'package:levelink_guru/model/transaksi_model.dart';
 
 class JadwalApi {
   getJadwal(int id) async {
@@ -35,6 +38,26 @@ class JadwalApi {
         jadwals.add(j);
       }
       return jadwals;
+    }
+  }
+
+  storeJadwal(Transaksi transaksi) async {
+    var url = Uri.parse('$mainUrl/store-jadwal');
+    var response = await http.post(
+      url,
+      headers: {"Content-type": "application/json"},
+      body: jsonEncode({
+        "id_siswa": transaksi.cart!.siswa!.id,
+        "id_kelas":
+            transaksi.kelas!.map((kelas) => {"id_kelas": kelas.id}).toList(),
+        "cart_id": transaksi.cart!.id
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      log('acc sukses');
+    } else {
+      log(response.body);
     }
   }
 }

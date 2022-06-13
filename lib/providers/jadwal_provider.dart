@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:levelink_guru/api/jadwal_api.dart';
 import 'package:levelink_guru/model/jadwal_model.dart';
+import 'package:levelink_guru/model/transaksi_model.dart';
 
 class JadwalProvider extends ChangeNotifier {
   List<Jadwal> jadwals = [];
@@ -19,5 +20,11 @@ class JadwalProvider extends ChangeNotifier {
         notifyListeners();
       }
     });
+  }
+
+  storeJadwal(Transaksi transaksi, int id) async {
+    JadwalApi().storeJadwal(transaksi);
+    jadwals = await JadwalApi().getJadwal(id);
+    notifyListeners();
   }
 }

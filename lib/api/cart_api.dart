@@ -71,7 +71,9 @@ class CartApi {
       for (var item in data) {
         Cart c = Cart(
           id: item['id'],
-          siswa: Siswa(nama: item['siswa_cart']['nama_pengguna']),
+          siswa: Siswa(
+              id: item['siswa_cart']['id'],
+              nama: item['siswa_cart']['nama_pengguna']),
           status: item['status'],
         );
 
@@ -99,6 +101,8 @@ class CartApi {
       }
     }
 
-    return transaksi;
+    return transaksi
+        .where((element) => element.cart!.status == 'requested')
+        .toList();
   }
 }
