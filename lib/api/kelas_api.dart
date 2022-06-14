@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -21,6 +23,29 @@ class KelasApi {
       }
 
       return kelass;
+    }
+  }
+
+  storeKelas(int idMapel, String hari, String jam, int harga) async {
+    var url = Uri.parse('$mainUrl/store-kelas');
+    var response = await http.post(
+      url,
+      headers: {"Content-type": "application/json"},
+      body: jsonEncode({
+        "id_pengguna": currentid,
+        "id_mata_pelajaran": idMapel,
+        "hari": hari,
+        "jam": jam,
+        "harga": harga,
+        "is_penuh": 0,
+        "is_tidak_aktif": 0
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      log('tambah kelas sukses');
+    } else {
+      log(response.body);
     }
   }
 }

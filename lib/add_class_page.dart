@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:levelink_guru/custom_theme.dart';
 import 'package:levelink_guru/list_data.dart';
 import 'package:levelink_guru/model/mata_pelajaran_model.dart';
+import 'package:levelink_guru/providers/kelas_provider.dart';
 import 'package:levelink_guru/widget/custom_button.dart';
 import 'package:levelink_guru/widget/input_form.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 extension TimeOfDayConverter on TimeOfDay {
   String to24hours() {
@@ -40,6 +42,7 @@ class _AddClassPageState extends State<AddClassPage> {
         MataPelajaran mp = MataPelajaran(
           id: item['id'],
           mataPelajaran: item['nama_mata_pelajaran'],
+          jenjangMataPelajaran: item['jenjang_mata_pelajaran'],
         );
 
         mataPelajarans.add(mp);
@@ -71,6 +74,7 @@ class _AddClassPageState extends State<AddClassPage> {
 
   @override
   Widget build(BuildContext context) {
+    final kelasProvider = Provider.of<KelasProvider>(context);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -103,19 +107,20 @@ class _AddClassPageState extends State<AddClassPage> {
                     .map((mapel) => DropdownMenuItem<String>(
                           value: mapel.id.toString(),
                           child: Text(
-                            mapel.mataPelajaran!,
+                            '${mapel.mataPelajaran!} ${mapel.jenjangMataPelajaran!}',
                             style: const TextStyle(fontSize: 13),
                           ),
                         ))
                     .toList(),
                 onChanged: (value) {
                   setState(() {
+                    // print(value);
                     selectedMapel = value;
                   });
                 },
                 hint: selectedMapel == null
                     ? const Text(
-                        'Mata Pelajaran',
+                        'mata pelajaran',
                         style: TextStyle(
                           fontSize: 13,
                           color: Colors.grey,
@@ -134,7 +139,11 @@ class _AddClassPageState extends State<AddClassPage> {
           const SizedBox(
             height: 16,
           ),
-          InputForm(controller: hariController, labelText: 'hari'),
+          InputForm(
+            controller: hariController,
+            labelText: 'hari',
+            textCapitalization: TextCapitalization.sentences,
+          ),
           const SizedBox(
             height: 16,
           ),
@@ -142,6 +151,7 @@ class _AddClassPageState extends State<AddClassPage> {
             readonly: true,
             onTap: () async {
               final TimeOfDay? timeOfDay = await showTimePicker(
+                helpText: 'SET JADWAL',
                 context: context,
                 initialTime: selectedTime,
                 initialEntryMode: TimePickerEntryMode.input,
@@ -158,14 +168,43 @@ class _AddClassPageState extends State<AddClassPage> {
           const SizedBox(
             height: 16,
           ),
-          InputForm(controller: hargaController, labelText: 'harga'),
+          InputForm(
+            controller: hargaController,
+            labelText: 'harga',
+            keyboardType: TextInputType.number,
+          ),
           const SizedBox(
             height: 16,
           ),
           CustomButton(
             color: Colour.blue,
             text: 'Buat Kelas',
-            onTap: () {},
+            onTap: () {
+              for (var item in kelasProvider.kelas) {
+                if (item.hari == hariController.text &&
+                    item.jam == selectedTime.to24hours()) {
+                  var snackBar = SnackBar(
+                    content: const Text('Jadwal Bertabrakan!'),
+                    action: SnackBarAction(
+                      textColor: Colors.blue,
+                      label: 'dismiss',
+                      onPressed: () {
+                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                      },
+                    ),
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  return;
+                }
+              }
+              kelasProvider.storeKelas(
+                int.parse(selectedMapel!),
+                hariController.text,
+                selectedTime.to24hours(),
+                int.parse(hargaController.text),
+              );
+              Navigator.pop(context);
+            },
           ),
         ],
       ),

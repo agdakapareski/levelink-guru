@@ -27,4 +27,16 @@ class KelasProvider extends ChangeNotifier {
     kelas = await KelasApi().getKelas();
     notifyListeners();
   }
+
+  storeKelas(
+    int idMapel,
+    String hari,
+    String jam,
+    int harga,
+  ) async {
+    await KelasApi().storeKelas(idMapel, hari, jam, harga);
+
+    kelas = await KelasApi().getKelas();
+    notifyListeners();
+  }
 }
