@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:levelink_guru/activity_page.dart';
 
 import '../dashboard_page.dart';
-import '../find_page.dart';
+import '../class_page.dart';
 import '../transaction_page.dart';
 
 class TabProvider extends ChangeNotifier {

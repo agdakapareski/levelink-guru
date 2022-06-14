@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:levelink_guru/add_class_page.dart';
 import 'package:levelink_guru/custom_theme.dart';
 import 'package:levelink_guru/providers/kelas_provider.dart';
 import 'package:levelink_guru/widget/padded_widget.dart';
@@ -27,7 +28,12 @@ class _FindPageState extends State<FindPage> {
       backgroundColor: Colors.white,
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colour.blue,
-        onPressed: () {},
+        onPressed: () {
+          Route route = MaterialPageRoute(
+            builder: (context) => const AddClassPage(),
+          );
+          Navigator.push(context, route);
+        },
         child: const Icon(Icons.add),
       ),
       appBar: AppBar(

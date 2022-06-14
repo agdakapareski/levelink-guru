@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:levelink_guru/list_data.dart';
-import 'package:levelink_guru/model/transaksi_model.dart';
 import 'package:levelink_guru/providers/jadwal_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:levelink_guru/custom_theme.dart';
@@ -26,7 +25,6 @@ class _TransactionPageState extends State<TransactionPage> {
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context);
-    final jadwalprovider = Provider.of<JadwalProvider>(context);
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -83,7 +81,6 @@ class _TransactionPageState extends State<TransactionPage> {
                               itemBuilder: (context, index) {
                                 return transactionList(
                                   cartProvider,
-                                  jadwalprovider,
                                   index,
                                 );
                               },
@@ -158,13 +155,12 @@ class _TransactionPageState extends State<TransactionPage> {
   }
 }
 
-transactionList(
-    CartProvider cartProvider, JadwalProvider jadwalProvider, index) {
+transactionList(CartProvider cartProvider, index) {
   return Slidable(
     endActionPane: ActionPane(motion: const DrawerMotion(), children: [
       SlidableAction(
         onPressed: (context) async {
-          jadwalProvider.storeJadwal(cartProvider.transaksi[index], currentid!);
+          cartProvider.storeJadwal(cartProvider.transaksi[index], currentid!);
         },
         backgroundColor: Colour.blue,
         foregroundColor: Colors.white,
