@@ -75,6 +75,8 @@ class _FindPageState extends State<FindPage> {
                   ),
                 ),
                 ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
                   itemCount: kelasProvider.kelas.length,
                   itemBuilder: (context, index) {
                     Kelas kelas = kelasProvider.kelas[index];
