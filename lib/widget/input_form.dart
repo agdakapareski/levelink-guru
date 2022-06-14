@@ -8,6 +8,7 @@ class InputForm extends StatefulWidget {
   final Widget? suffix;
   final TextCapitalization? textCapitalization;
   final Function(String)? onChanged;
+  final Function()? onTap;
   final bool? readonly;
   final String? labelText;
   final int? maxLines;
@@ -25,6 +26,7 @@ class InputForm extends StatefulWidget {
     this.suffix,
     this.textCapitalization,
     this.onChanged,
+    this.onTap,
     this.readonly,
     this.maxLines,
     this.obscureText,
@@ -55,6 +57,7 @@ class InputFormState extends State<InputForm> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      onTap: widget.onTap,
       obscureText: widget.obscureText == null ? false : true,
       validator: widget.validator,
       controller: widget.controller,
