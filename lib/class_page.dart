@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:levelink_guru/add_class_page.dart';
 import 'package:levelink_guru/custom_theme.dart';
+import 'package:levelink_guru/model/kelas_model.dart';
 import 'package:levelink_guru/providers/kelas_provider.dart';
 import 'package:levelink_guru/widget/padded_widget.dart';
 import 'package:provider/provider.dart';
@@ -73,43 +74,47 @@ class _FindPageState extends State<FindPage> {
                     ),
                   ),
                 ),
-                Column(
-                  children: kelasProvider.kelas
-                      .map(
-                        (kelas) => ListTile(
-                          shape: const Border(
-                            bottom: BorderSide(
-                              color: Color(0xFFEEEEEE),
-                            ),
-                          ),
-                          // isThreeLine: true,
-                          title: Text(
-                            kelas.mataPelajaran!.mataPelajaran!.toUpperCase(),
-                            style: const TextStyle(fontSize: 14),
-                          ),
-                          subtitle: Text('${kelas.hari!}, ${kelas.jam!}'),
-                          trailing: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                NumberFormat.simpleCurrency(
-                                  name: 'Rp. ',
-                                  locale: 'id',
-                                ).format(kelas.harga),
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(kelas.isPenuh == 1 ? 'penuh' : 'tersedia'),
-                            ],
-                          ),
-                        ),
-                      )
-                      .toList(),
+                ListView.builder(
+                  itemCount: kelasProvider.kelas.length,
+                  itemBuilder: (context, index) {
+                    Kelas kelas = kelasProvider.kelas[index];
+                    return listKelas(kelas);
+                  },
                 ),
               ],
             ),
     );
   }
+}
+
+listKelas(Kelas kelas) {
+  return ListTile(
+    shape: const Border(
+      bottom: BorderSide(
+        color: Color(0xFFEEEEEE),
+      ),
+    ),
+    // isThreeLine: true,
+    title: Text(
+      kelas.mataPelajaran!.mataPelajaran!.toUpperCase(),
+      style: const TextStyle(fontSize: 14),
+    ),
+    subtitle: Text('${kelas.hari!}, ${kelas.jam!}'),
+    trailing: Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          NumberFormat.simpleCurrency(
+            name: 'Rp. ',
+            locale: 'id',
+          ).format(kelas.harga),
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Text(kelas.isPenuh == 1 ? 'penuh' : 'tersedia'),
+      ],
+    ),
+  );
 }

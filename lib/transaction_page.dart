@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:levelink_guru/list_data.dart';
-import 'package:levelink_guru/providers/jadwal_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:levelink_guru/custom_theme.dart';
 import 'package:levelink_guru/providers/cart_provider.dart';
@@ -74,10 +73,7 @@ class _TransactionPageState extends State<TransactionPage> {
                           ? ListView.builder(
                               physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
-                              itemCount: cartProvider.transaksi
-                                  .where((element) =>
-                                      element.cart!.status == 'requested')
-                                  .length,
+                              itemCount: cartProvider.transaksi.length,
                               itemBuilder: (context, index) {
                                 return transactionList(
                                   cartProvider,

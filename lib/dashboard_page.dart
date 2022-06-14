@@ -3,12 +3,12 @@
 /// File ini berisi UI untuk halaman dashboard.
 
 import 'package:flutter/material.dart';
+import 'package:levelink_guru/model/jadwal_model.dart';
 import 'package:provider/provider.dart';
 import 'package:levelink_guru/account_page.dart';
 import 'package:levelink_guru/custom_theme.dart';
 import 'package:levelink_guru/list_data.dart';
 import 'package:levelink_guru/providers/jadwal_provider.dart';
-import 'package:levelink_guru/providers/tab_provider.dart';
 import 'package:levelink_guru/widget/padded_widget.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -148,37 +148,39 @@ class _DashboardPageState extends State<DashboardPage> {
                             ),
                           ),
                         )
-                      : Column(
-                          children: jadwalProvider.jadwals
-                              .map(
-                                (jadwal) => ListTile(
-                                  shape: const Border(
-                                    bottom: BorderSide(
-                                      color: Color(0xFFEEEEEE),
-                                    ),
-                                  ),
-                                  title: Text(
-                                    '${jadwal.kelas!.hari!.toUpperCase()}, ${jadwal.kelas!.jam!}',
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                      // fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  subtitle: Text(
-                                    jadwal.kelas!.mataPelajaran!.mataPelajaran!,
-                                    style: const TextStyle(
-                                      fontSize: 13,
-                                    ),
-                                  ),
-                                  trailing: Text(
-                                    jadwal.siswa!.nama!,
-                                    style: TextStyle(
-                                      color: Colour.blue,
-                                    ),
-                                  ),
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: jadwalProvider.jadwals.length,
+                          itemBuilder: (context, index) {
+                            Jadwal jadwal = jadwalProvider.jadwals[index];
+                            return ListTile(
+                              shape: const Border(
+                                bottom: BorderSide(
+                                  color: Color(0xFFEEEEEE),
                                 ),
-                              )
-                              .toList(),
+                              ),
+                              title: Text(
+                                '${jadwal.kelas!.hari!.toUpperCase()}, ${jadwal.kelas!.jam!}',
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  // fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              subtitle: Text(
+                                jadwal.kelas!.mataPelajaran!.mataPelajaran!,
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                ),
+                              ),
+                              trailing: Text(
+                                jadwal.siswa!.nama!,
+                                style: TextStyle(
+                                  color: Colour.blue,
+                                ),
+                              ),
+                            );
+                          },
                         ),
                 ),
               ],
