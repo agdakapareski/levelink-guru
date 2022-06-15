@@ -16,7 +16,7 @@ class CartProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  storeJadwal(Transaksi t, int id) async {
+  storeJadwal(Transaksi t) async {
     JadwalApi().storeJadwal(t);
     transaksi = await CartApi().getCart();
     notifyListeners();

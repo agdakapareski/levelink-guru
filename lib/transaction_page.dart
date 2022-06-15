@@ -156,7 +156,7 @@ transactionList(CartProvider cartProvider, index) {
     endActionPane: ActionPane(motion: const DrawerMotion(), children: [
       SlidableAction(
         onPressed: (context) async {
-          cartProvider.storeJadwal(cartProvider.transaksi[index], currentid!);
+          cartProvider.storeJadwal(cartProvider.transaksi[index]);
         },
         backgroundColor: Colour.blue,
         foregroundColor: Colors.white,
