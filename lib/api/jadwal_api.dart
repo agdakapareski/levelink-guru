@@ -48,8 +48,9 @@ class JadwalApi {
       headers: {"Content-type": "application/json"},
       body: jsonEncode({
         "id_siswa": transaksi.cart!.siswa!.id,
-        "id_kelas":
-            transaksi.kelas!.map((kelas) => {"id_kelas": kelas.id}).toList(),
+        "id_kelas": transaksi.kelas!.map((kelas) {
+          return {"id_kelas": kelas.id};
+        }).toList(),
         "cart_id": transaksi.cart!.id
       }),
     );
