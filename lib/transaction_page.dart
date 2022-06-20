@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:levelink_guru/list_data.dart';
 import 'package:provider/provider.dart';
 import 'package:levelink_guru/custom_theme.dart';
 import 'package:levelink_guru/providers/cart_provider.dart';
@@ -95,38 +94,6 @@ class _TransactionPageState extends State<TransactionPage> {
                                 ],
                               ),
                             ),
-                      // const CustomDivider(),
-                      // const SizedBox(
-                      //   height: 16,
-                      // ),
-                      // const PaddedWidget(
-                      //   child: SmallerTitleText('Tagihan'),
-                      // ),
-                      // const SizedBox(
-                      //   height: 16,
-                      // ),
-                      // Container(
-                      //   decoration: const BoxDecoration(
-                      //     border: Border(
-                      //       bottom: BorderSide(
-                      //         color: Color(0xFFEEEEEE),
-                      //       ),
-                      //     ),
-                      //   ),
-                      //   child: PaddedWidget(
-                      //     child: Column(
-                      //       crossAxisAlignment: CrossAxisAlignment.start,
-                      //       children: const [
-                      //         Text(
-                      //           'Belum ada tagihan',
-                      //         ),
-                      //         SizedBox(
-                      //           height: 16,
-                      //         ),
-                      //       ],
-                      //     ),
-                      //   ),
-                      // ),
                     ],
                   )
                 : Center(

@@ -4,9 +4,11 @@ import 'package:levelink_guru/model/siswa_model.dart';
 class Jadwal {
   Siswa? siswa;
   Kelas? kelas;
+  int? isAktif;
 
   Jadwal({
     this.siswa,
     this.kelas,
+    this.isAktif,
   });
 }

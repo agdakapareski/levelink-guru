@@ -119,9 +119,9 @@ class _AddClassPageState extends State<AddClassPage> {
                   });
                 },
                 hint: selectedMapel == null
-                    ? const Text(
-                        'mata pelajaran',
-                        style: TextStyle(
+                    ? Text(
+                        listMapelDikuasai.isEmpty ? 'memuat' : 'mata pelajaran',
+                        style: const TextStyle(
                           fontSize: 13,
                           color: Colors.grey,
                         ),
