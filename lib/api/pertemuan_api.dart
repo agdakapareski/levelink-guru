@@ -25,8 +25,8 @@ class PertemuanApi {
     }
   }
 
-  getPertemuanAktif(int idJadwal) async {
-    var url = Uri.parse('$mainUrl/show-pertemuan/$idJadwal');
+  getPertemuanAktif() async {
+    var url = Uri.parse('$mainUrl/show-pertemuan/$currentid');
     var response = await http.get(url);
 
     var body = json.decode(response.body);
