@@ -47,4 +47,30 @@ class PertemuanApi {
       return log(response.body);
     }
   }
+
+  getPertemuan() async {
+    var url = Uri.parse('$mainUrl/histori-pertemuan/$currentid');
+    var response = await http.get(url);
+
+    var body = json.decode(response.body);
+    var datas = body['data'];
+    List<Pertemuan> pertemuans = [];
+
+    if (response.statusCode == 200) {
+      for (var data in datas) {
+        Pertemuan p = Pertemuan(
+          id: data['id'],
+          idJadwal: data['id_jadwal'],
+          materi: data['materi'],
+          isAktif: data['is_aktif'],
+          capaian: data['capaian'],
+          evaluasi: data['evaluasi'],
+        );
+        pertemuans.add(p);
+      }
+      return pertemuans;
+    } else {
+      log(response.body);
+    }
+  }
 }
