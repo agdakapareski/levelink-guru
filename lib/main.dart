@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
+import 'package:levelink_guru/splash_screen.dart';
+
+import 'package:provider/provider.dart';
+import 'package:levelink_guru/providers/pertemuan_provider.dart';
 import 'package:levelink_guru/providers/cart_provider.dart';
 import 'package:levelink_guru/providers/jadwal_provider.dart';
 import 'package:levelink_guru/providers/kelas_provider.dart';
 import 'package:levelink_guru/providers/tab_provider.dart';
-import 'package:levelink_guru/splash_screen.dart';
 
 void main() {
   runApp(
@@ -21,6 +23,7 @@ List<SingleChildWidget> providers = [
   ChangeNotifierProvider<TabProvider>(create: (_) => TabProvider()),
   ChangeNotifierProvider<CartProvider>(create: (_) => CartProvider()),
   ChangeNotifierProvider<JadwalProvider>(create: (_) => JadwalProvider()),
+  ChangeNotifierProvider<PertemuanProvider>(create: (_) => PertemuanProvider()),
 ];
 
 class MyApp extends StatelessWidget {

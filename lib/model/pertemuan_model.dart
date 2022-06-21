@@ -15,3 +15,13 @@ class Pertemuan {
     this.capaian,
   });
 }
+
+class ViewPertemuan {
+  Pertemuan? pertemuanAktif;
+  List<Pertemuan>? riwayatPertemuan;
+
+  ViewPertemuan({
+    this.pertemuanAktif,
+    this.riwayatPertemuan,
+  });
+}

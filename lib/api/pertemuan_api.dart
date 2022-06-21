@@ -25,15 +25,42 @@ class PertemuanApi {
     }
   }
 
-  getPertemuanAktif() async {
+  // getPertemuanAktif() async {
+  //   var url = Uri.parse('$mainUrl/show-pertemuan/$currentid');
+  //   var response = await http.get(url);
+
+  //   var body = json.decode(response.body);
+  //   var data = body['data'];
+
+  //   if (response.statusCode == 200) {
+  //     Pertemuan pertemuanAktif = Pertemuan(
+  //       id: data['id'],
+  //       idJadwal: data['id_jadwal'],
+  //       materi: data['materi'],
+  //       isAktif: data['is_aktif'],
+  //       capaian: data['capaian'],
+  //       evaluasi: data['evaluasi'],
+  //     );
+
+  //     return pertemuanAktif;
+  //   } else {
+  //     return log(response.body);
+  //   }
+  // }
+
+  getPertemuan() async {
     var url = Uri.parse('$mainUrl/show-pertemuan/$currentid');
     var response = await http.get(url);
 
     var body = json.decode(response.body);
-    var data = body['data'];
+
+    var data = body['aktif'];
+    var datas = body['riwayat'];
+
+    List<Pertemuan> pertemuans = [];
 
     if (response.statusCode == 200) {
-      Pertemuan pertemuanAktif = Pertemuan(
+      Pertemuan pertemuan = Pertemuan(
         id: data['id'],
         idJadwal: data['id_jadwal'],
         materi: data['materi'],
@@ -41,22 +68,6 @@ class PertemuanApi {
         capaian: data['capaian'],
         evaluasi: data['evaluasi'],
       );
-
-      return pertemuanAktif;
-    } else {
-      return log(response.body);
-    }
-  }
-
-  getPertemuan() async {
-    var url = Uri.parse('$mainUrl/histori-pertemuan/$currentid');
-    var response = await http.get(url);
-
-    var body = json.decode(response.body);
-    var datas = body['data'];
-    List<Pertemuan> pertemuans = [];
-
-    if (response.statusCode == 200) {
       for (var data in datas) {
         Pertemuan p = Pertemuan(
           id: data['id'],
@@ -68,9 +79,14 @@ class PertemuanApi {
         );
         pertemuans.add(p);
       }
-      return pertemuans;
+      ViewPertemuan viewPertemuan = ViewPertemuan(
+        pertemuanAktif: pertemuan,
+        riwayatPertemuan: pertemuans,
+      );
+
+      return viewPertemuan;
     } else {
-      log(response.body);
+      return log(response.body);
     }
   }
 }

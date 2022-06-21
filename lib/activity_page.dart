@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:levelink_guru/providers/pertemuan_provider.dart';
 import 'package:levelink_guru/widget/padded_widget.dart';
+import 'package:provider/provider.dart';
 
 import 'custom_theme.dart';
+
+// TODO 1: implementasi pertemuan aktif
+// TODO 2: implementasi histori pertemuan
 
 class ActivityPage extends StatefulWidget {
   const ActivityPage({Key? key}) : super(key: key);
@@ -11,6 +16,16 @@ class ActivityPage extends StatefulWidget {
 }
 
 class _ActivityPageState extends State<ActivityPage> {
+  @override
+  void initState() {
+    final pertemuanProvider = Provider.of<PertemuanProvider>(
+      context,
+      listen: false,
+    );
+    pertemuanProvider.getPertemuan();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
