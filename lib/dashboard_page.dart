@@ -9,6 +9,8 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:levelink_guru/model/jadwal_model.dart';
+import 'package:levelink_guru/mulai_kelas_page.dart';
+import 'package:levelink_guru/providers/tab_provider.dart';
 import 'package:levelink_guru/widget/confirm_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:levelink_guru/account_page.dart';
@@ -33,9 +35,6 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  String hariIni = DateFormat('EEEE', 'id').format(
-    DateTime.parse(DateTime.now().toString()),
-  );
   String jamSekarang = TimeOfDay.now().to24hours();
   @override
   void initState() {
@@ -47,8 +46,11 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    // final tabProvider = Provider.of<TabProvider>(context);
+    final tabProvider = Provider.of<TabProvider>(context);
     final jadwalProvider = Provider.of<JadwalProvider>(context);
+    String hariIni = DateFormat('EEEE', 'id').format(
+      DateTime.parse(DateTime.now().toString()),
+    );
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -179,7 +181,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                 extentRatio: 0.7,
                                 children: [
                                   SlidableAction(
-                                    // autoClose: false,
+                                    autoClose: false,
                                     onPressed: (context) {
                                       if (jadwal.kelas!.hari == hariIni &&
                                           jadwal.kelas!.jam == jamSekarang) {
@@ -193,15 +195,29 @@ class _DashboardPageState extends State<DashboardPage> {
                                           children: [
                                             Expanded(
                                               child: GestureDetector(
-                                                onTap: () {},
+                                                onTap: () {
+                                                  Navigator.pop(context);
+                                                  Route route =
+                                                      MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        MulaiKelasPage(
+                                                      jadwal: jadwal,
+                                                    ),
+                                                  );
+
+                                                  Navigator.push(
+                                                    context,
+                                                    route,
+                                                  );
+                                                  tabProvider.changeScreen(1);
+                                                  // Navigator.pop(context);
+                                                  // Slidable.of(context)!.close();
+                                                },
                                                 child: Container(
                                                   padding:
                                                       const EdgeInsets.all(10),
                                                   decoration: BoxDecoration(
                                                     color: Colour.blue,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            5),
                                                   ),
                                                   child: const Center(
                                                     child: Text(
@@ -215,27 +231,31 @@ class _DashboardPageState extends State<DashboardPage> {
                                                 ),
                                               ),
                                             ),
-                                            // const SizedBox(width: 10),
-                                            // Expanded(
-                                            //   child: GestureDetector(
-                                            //     onTap: () {
-                                            //       Navigator.pop(context);
-                                            //     },
-                                            //     child: Container(
-                                            //       padding:
-                                            //           const EdgeInsets.all(10),
-                                            //       child: Center(
-                                            //         child: Text(
-                                            //           'batal',
-                                            //           style: TextStyle(
-                                            //             fontSize: 13,
-                                            //             color: Colour.red,
-                                            //           ),
-                                            //         ),
-                                            //       ),
-                                            //     ),
-                                            //   ),
-                                            // ),
+                                            const SizedBox(width: 10),
+                                            Expanded(
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  Navigator.pop(context);
+                                                  Slidable.of(context)!.close();
+                                                },
+                                                child: Container(
+                                                  padding:
+                                                      const EdgeInsets.all(10),
+                                                  decoration: BoxDecoration(
+                                                    color: Colour.red,
+                                                  ),
+                                                  child: const Center(
+                                                    child: Text(
+                                                      'batal',
+                                                      style: TextStyle(
+                                                        fontSize: 13,
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
                                           ],
                                         );
                                       }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:levelink_guru/providers/pertemuan_provider.dart';
 import 'package:levelink_guru/widget/padded_widget.dart';
@@ -5,8 +7,7 @@ import 'package:provider/provider.dart';
 
 import 'custom_theme.dart';
 
-// TODO 1: implementasi pertemuan aktif
-// TODO 2: implementasi histori pertemuan
+// TODO: implementasi histori pertemuan
 
 class ActivityPage extends StatefulWidget {
   const ActivityPage({Key? key}) : super(key: key);
@@ -28,6 +29,10 @@ class _ActivityPageState extends State<ActivityPage> {
 
   @override
   Widget build(BuildContext context) {
+    final pertemuanProvider = Provider.of<PertemuanProvider>(
+      context,
+    );
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -39,26 +44,6 @@ class _ActivityPageState extends State<ActivityPage> {
         elevation: 0,
         backgroundColor: Colors.white,
         toolbarHeight: 60,
-        // actions: [
-        //   Padding(
-        //     padding: const EdgeInsets.symmetric(
-        //       horizontal: 16,
-        //     ),
-        //     child: GestureDetector(
-        //       child: const CircleAvatar(
-        //         child: Icon(Icons.person),
-        //       ),
-        //       onTap: () {
-        //         Navigator.push(
-        //           context,
-        //           MaterialPageRoute(
-        //             builder: (context) => const AccountPage(),
-        //           ),
-        //         );
-        //       },
-        //     ),
-        //   ),
-        // ],
       ),
       body: ListView(
         children: [
@@ -81,16 +66,74 @@ class _ActivityPageState extends State<ActivityPage> {
                   height: 10,
                 ),
                 Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                  ),
                   decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colour.blue,
-                      width: 0.5,
-                    ),
+                    border:
+                        pertemuanProvider.viewPertemuan.pertemuanAktif == null
+                            ? Border.all(
+                                color: Colour.blue,
+                                width: 0.5,
+                              )
+                            : const Border(),
+                    color:
+                        pertemuanProvider.viewPertemuan.pertemuanAktif == null
+                            ? Colors.white
+                            : Colour.blue,
                   ),
-                  height: 88,
-                  child: const Center(
-                    child: Text('belum ada kelas aktif'),
-                  ),
+                  height: 83,
+                  child: pertemuanProvider.viewPertemuan.pertemuanAktif == null
+                      ? const Center(
+                          child: Text(
+                            'belum ada kelas aktif',
+                          ),
+                        )
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            const Text(
+                              'PERTEMUAN',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  pertemuanProvider
+                                      .viewPertemuan
+                                      .pertemuanAktif!
+                                      .jadwal!
+                                      .kelas!
+                                      .mataPelajaran!
+                                      .mataPelajaran!,
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                                const Spacer(),
+                                Text(
+                                  pertemuanProvider.viewPertemuan
+                                      .pertemuanAktif!.jadwal!.siswa!.nama!,
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              'Materi : "${pertemuanProvider.viewPertemuan.pertemuanAktif!.materi!}"',
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          ],
+                        ),
                 ),
               ],
             ),
@@ -113,6 +156,25 @@ class _ActivityPageState extends State<ActivityPage> {
           ),
           const SizedBox(
             height: 16,
+          ),
+          ListView.builder(
+            itemCount: pertemuanProvider.viewPertemuan.riwayatPertemuan!.length,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
+              var riwayat =
+                  pertemuanProvider.viewPertemuan.riwayatPertemuan![index];
+
+              return PaddedWidget(
+                child: Row(
+                  children: [
+                    Text(riwayat.materi!),
+                    const Spacer(),
+                    Text(riwayat.jadwal!.siswa!.nama!),
+                  ],
+                ),
+              );
+            },
           ),
         ],
       ),

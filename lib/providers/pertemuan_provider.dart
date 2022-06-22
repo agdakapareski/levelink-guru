@@ -19,4 +19,11 @@ class PertemuanProvider extends ChangeNotifier {
     viewPertemuan = await PertemuanApi().getPertemuan();
     notifyListeners();
   }
+
+  updatePertemuan(Pertemuan p, int idPertemuan) async {
+    await PertemuanApi().updatePertemuan(p, idPertemuan);
+
+    viewPertemuan = await PertemuanApi().getPertemuan();
+    notifyListeners();
+  }
 }

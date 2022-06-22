@@ -24,11 +24,18 @@ class JadwalApi {
     if (response.statusCode == 200) {
       for (var jadwal in data) {
         Jadwal j = Jadwal(
-          siswa: Siswa(nama: jadwal['siswa']['nama_pengguna']),
+          id: jadwal['id'],
+          siswa: Siswa(
+            nama: jadwal['siswa']['nama_pengguna'],
+            jenjang: jadwal['siswa']['jenjang'],
+            kelas: jadwal['siswa']['kelas'],
+          ),
           kelas: Kelas(
             mataPelajaran: MataPelajaran(
               mataPelajaran: jadwal['kelas']['mata_pelajaran_kelas']
                   ['nama_mata_pelajaran'],
+              jenjangMataPelajaran: jadwal['kelas']['mata_pelajaran_kelas']
+                  ['jenjang_mata_pelajaran'],
             ),
             hari: jadwal['kelas']['hari'],
             jam: jadwal['kelas']['jam'],
