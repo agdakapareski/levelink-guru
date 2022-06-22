@@ -88,6 +88,8 @@ class PertemuanApi {
             ? double.parse(data['capaian'].toString())
             : data['capaian'];
         pertemuan.evaluasi = data['evaluasi'];
+        pertemuan.jamMulai = DateTime.parse(data['created_at']);
+        pertemuan.jamSelesai = DateTime.parse(data['updated_at']);
         viewPertemuan.pertemuanAktif = pertemuan;
       } else {
         viewPertemuan.pertemuanAktif = null;
@@ -113,8 +115,10 @@ class PertemuanApi {
           isAktif: item['is_aktif'],
           capaian: item['capaian'].runtimeType == int
               ? double.parse(item['capaian'].toString())
-              : data['capaian'],
+              : item['capaian'],
           evaluasi: item['evaluasi'],
+          jamMulai: DateTime.parse(item['created_at']),
+          jamSelesai: DateTime.parse(item['updated_at']),
         );
         riwayatPertemuan.add(p);
       }

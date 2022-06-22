@@ -155,6 +155,13 @@ class _AddClassPageState extends State<AddClassPage> {
                 context: context,
                 initialTime: selectedTime,
                 initialEntryMode: TimePickerEntryMode.input,
+                builder: (BuildContext context, Widget? child) {
+                  return MediaQuery(
+                    data: MediaQuery.of(context)
+                        .copyWith(alwaysUse24HourFormat: true),
+                    child: child!,
+                  );
+                },
               );
               if (timeOfDay != null && timeOfDay != selectedTime) {
                 setState(() {

@@ -8,6 +8,8 @@ class Pertemuan {
   int? isAktif;
   String? evaluasi;
   double? capaian;
+  DateTime? jamMulai;
+  DateTime? jamSelesai;
 
   Pertemuan({
     this.id,
@@ -17,6 +19,8 @@ class Pertemuan {
     this.isAktif,
     this.evaluasi,
     this.capaian,
+    this.jamMulai,
+    this.jamSelesai,
   });
 }
 
