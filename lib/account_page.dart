@@ -73,6 +73,19 @@ class _AccountPageState extends State<AccountPage> {
           const SizedBox(height: 16),
           const CustomDivider(),
           ListTile(
+            onTap: () {},
+            leading: Icon(
+              Icons.edit,
+              color: Colour.blue,
+            ),
+            title: const Text('Mata Pelajaran Dikuasai'),
+            shape: const Border(
+              bottom: BorderSide(
+                color: Color(0xFFEEEEEE),
+              ),
+            ),
+          ),
+          ListTile(
             onTap: () {
               deleteCurrentUser();
               Navigator.pushAndRemoveUntil(
