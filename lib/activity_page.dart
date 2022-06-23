@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 import 'custom_theme.dart';
 import 'model/pertemuan_model.dart';
 
-// TODO: implementasi update aktivitas
+// TODO: implementasi evaluasi
 
 class ActivityPage extends StatefulWidget {
   const ActivityPage({Key? key}) : super(key: key);

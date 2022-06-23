@@ -10,6 +10,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:levelink_guru/model/jadwal_model.dart';
 import 'package:levelink_guru/mulai_kelas_page.dart';
+import 'package:levelink_guru/providers/pertemuan_provider.dart';
 import 'package:levelink_guru/providers/tab_provider.dart';
 import 'package:levelink_guru/widget/confirm_dialog.dart';
 import 'package:provider/provider.dart';
@@ -48,6 +49,8 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget build(BuildContext context) {
     final tabProvider = Provider.of<TabProvider>(context);
     final jadwalProvider = Provider.of<JadwalProvider>(context);
+    final pertemuanProvider = Provider.of<PertemuanProvider>(context);
+
     String hariIni = DateFormat('EEEE', 'id').format(
       DateTime.parse(DateTime.now().toString()),
     );
@@ -187,77 +190,100 @@ class _DashboardPageState extends State<DashboardPage> {
                                           jadwal.kelas!.jam == jamSekarang) {
                                         log('jadwal: ${jadwal.kelas!.hari}, ${jadwal.kelas!.jam}\nhari ini: $hariIni, $jamSekarang\nhari dan jam sama');
                                       } else {
-                                        confirmDialog(
-                                          title: 'Konfirmasi Beda Jadwal',
-                                          confirmation:
-                                              'Apakah anda yakin ingin memulai kelas sekarang?',
-                                          context: context,
-                                          children: [
-                                            Expanded(
-                                              child: GestureDetector(
-                                                onTap: () {
-                                                  Navigator.pop(context);
-                                                  Route route =
-                                                      MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        MulaiKelasPage(
-                                                      jadwal: jadwal,
-                                                    ),
-                                                  );
+                                        if (pertemuanProvider
+                                                .viewPertemuan.pertemuanAktif ==
+                                            null) {
+                                          confirmDialog(
+                                            title: 'Konfirmasi Beda Jadwal',
+                                            confirmation:
+                                                'Apakah anda yakin ingin memulai kelas sekarang?',
+                                            context: context,
+                                            children: [
+                                              Expanded(
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    Navigator.pop(context);
+                                                    Route route =
+                                                        MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          MulaiKelasPage(
+                                                        jadwal: jadwal,
+                                                      ),
+                                                    );
 
-                                                  Navigator.push(
-                                                    context,
-                                                    route,
-                                                  );
-                                                  tabProvider.changeScreen(1);
+                                                    Navigator.push(
+                                                      context,
+                                                      route,
+                                                    );
+                                                    tabProvider.changeScreen(1);
+                                                  },
                                                   // Navigator.pop(context);
                                                   // Slidable.of(context)!.close();
-                                                },
-                                                child: Container(
-                                                  padding:
-                                                      const EdgeInsets.all(10),
-                                                  decoration: BoxDecoration(
-                                                    color: Colour.blue,
-                                                  ),
-                                                  child: const Center(
-                                                    child: Text(
-                                                      'mulai',
-                                                      style: TextStyle(
-                                                        fontSize: 13,
-                                                        color: Colors.white,
+
+                                                  child: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            10),
+                                                    decoration: BoxDecoration(
+                                                      color: Colour.blue,
+                                                    ),
+                                                    child: const Center(
+                                                      child: Text(
+                                                        'mulai',
+                                                        style: TextStyle(
+                                                          fontSize: 13,
+                                                          color: Colors.white,
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                            const SizedBox(width: 10),
-                                            Expanded(
-                                              child: GestureDetector(
-                                                onTap: () {
-                                                  Navigator.pop(context);
-                                                  Slidable.of(context)!.close();
-                                                },
-                                                child: Container(
-                                                  padding:
-                                                      const EdgeInsets.all(10),
-                                                  decoration: BoxDecoration(
-                                                    color: Colour.red,
-                                                  ),
-                                                  child: const Center(
-                                                    child: Text(
-                                                      'batal',
-                                                      style: TextStyle(
-                                                        fontSize: 13,
-                                                        color: Colors.white,
+                                              const SizedBox(width: 10),
+                                              Expanded(
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    Navigator.pop(context);
+                                                    Slidable.of(context)!
+                                                        .close();
+                                                  },
+                                                  child: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            10),
+                                                    decoration: BoxDecoration(
+                                                      color: Colour.red,
+                                                    ),
+                                                    child: const Center(
+                                                      child: Text(
+                                                        'batal',
+                                                        style: TextStyle(
+                                                          fontSize: 13,
+                                                          color: Colors.white,
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
                                                 ),
                                               ),
+                                            ],
+                                          );
+                                        } else {
+                                          var snackBar = SnackBar(
+                                            content: const Text(
+                                                'Sedang ada pertemuan aktif!'),
+                                            action: SnackBarAction(
+                                              textColor: Colors.blue,
+                                              label: 'dismiss',
+                                              onPressed: () {
+                                                ScaffoldMessenger.of(context)
+                                                    .hideCurrentSnackBar();
+                                              },
                                             ),
-                                          ],
-                                        );
+                                          );
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(snackBar);
+                                        }
                                       }
                                     },
                                     backgroundColor: Colour.blue,
