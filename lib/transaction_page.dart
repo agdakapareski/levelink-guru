@@ -5,6 +5,8 @@ import 'package:levelink_guru/custom_theme.dart';
 import 'package:levelink_guru/providers/cart_provider.dart';
 import 'package:levelink_guru/widget/padded_widget.dart';
 
+// TODO: implementasi view pembayaran
+
 class TransactionPage extends StatefulWidget {
   const TransactionPage({Key? key}) : super(key: key);
 

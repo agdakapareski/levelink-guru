@@ -3,6 +3,9 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
+import 'package:levelink_guru/evaluasi_page.dart';
+import 'package:levelink_guru/list_data.dart';
+import 'package:levelink_guru/providers/pembayaran_provider.dart';
 import 'package:levelink_guru/providers/pertemuan_provider.dart';
 import 'package:levelink_guru/widget/confirm_dialog.dart';
 import 'package:levelink_guru/widget/padded_widget.dart';
@@ -33,9 +36,8 @@ class _ActivityPageState extends State<ActivityPage> {
 
   @override
   Widget build(BuildContext context) {
-    final pertemuanProvider = Provider.of<PertemuanProvider>(
-      context,
-    );
+    final pertemuanProvider = Provider.of<PertemuanProvider>(context);
+    final pembayaranProvider = Provider.of<PembayaranProvider>(context);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -105,7 +107,38 @@ class _ActivityPageState extends State<ActivityPage> {
                                       p,
                                       idPertemuan,
                                     );
+
+                                    double hargaKelas = pertemuanProvider
+                                        .viewPertemuan
+                                        .pertemuanAktif!
+                                        .jadwal!
+                                        .kelas!
+                                        .harga!;
+
+                                    int idSiswa = pertemuanProvider
+                                        .viewPertemuan
+                                        .pertemuanAktif!
+                                        .jadwal!
+                                        .siswa!
+                                        .id!;
+
+                                    pembayaranProvider.postPembayaran(
+                                      currentid!,
+                                      idSiswa,
+                                      idPertemuan,
+                                      hargaKelas,
+                                      currentid!,
+                                    );
+
                                     Navigator.pop(context);
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => EvaluasiPage(
+                                          idPertemuan: pertemuan.id!,
+                                        ),
+                                      ),
+                                    );
                                   },
                                   child: Container(
                                     padding: const EdgeInsets.all(10),
@@ -193,7 +226,16 @@ class _ActivityPageState extends State<ActivityPage> {
                             label: 'Detail',
                           ),
                           SlidableAction(
-                            onPressed: (context) {},
+                            onPressed: (context) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => EvaluasiPage(
+                                    idPertemuan: riwayat.id!,
+                                  ),
+                                ),
+                              );
+                            },
                             backgroundColor: Colour.red,
                             foregroundColor: Colors.white,
                             icon: Icons.edit,

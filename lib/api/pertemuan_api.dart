@@ -76,6 +76,9 @@ class PertemuanApi {
           ),
           kelas: Kelas(
             id: data['jadwal']['id_kelas'],
+            harga: data['jadwal']['kelas']['harga'].runtimeType != double
+                ? double.parse(data['jadwal']['kelas']['harga'].toString())
+                : data['jadwal']['kelas']['harga'],
             mataPelajaran: MataPelajaran(
               mataPelajaran: data['jadwal']['kelas']['mata_pelajaran_kelas']
                   ['nama_mata_pelajaran'],
