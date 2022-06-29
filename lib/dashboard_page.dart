@@ -144,13 +144,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 //   height: 16,
                 // ),
                 const PaddedWidget(
-                  child: Text(
-                    'Jadwal Mengajar',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  child: SmallerTitleText('JADWAL MENGAJAR'),
                 ),
                 Container(
                   decoration: BoxDecoration(

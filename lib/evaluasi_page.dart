@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:levelink_guru/custom_theme.dart';
+import 'package:levelink_guru/model/pertemuan_model.dart';
+import 'package:levelink_guru/providers/pertemuan_provider.dart';
 import 'package:levelink_guru/widget/custom_button.dart';
 import 'package:levelink_guru/widget/input_form.dart';
+import 'package:provider/provider.dart';
 
 class EvaluasiPage extends StatefulWidget {
   final int idPertemuan;
@@ -18,6 +21,7 @@ class _EvaluasiPageState extends State<EvaluasiPage> {
   TextEditingController evaluasiController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    final pertemuanProvider = Provider.of<PertemuanProvider>(context);
     return WillPopScope(
       onWillPop: () async {
         evaluasiController.clear();
@@ -184,7 +188,17 @@ class _EvaluasiPageState extends State<EvaluasiPage> {
                 height: 10,
               ),
               CustomButton(
-                onTap: () {},
+                onTap: () {
+                  Pertemuan p = Pertemuan(
+                    isAktif: 0,
+                    capaian: double.parse(jawabanFlag.toString()),
+                    evaluasi: evaluasiController.text,
+                  );
+
+                  pertemuanProvider.updatePertemuan(p, widget.idPertemuan);
+
+                  Navigator.popUntil(context, ((route) => route.isFirst));
+                },
                 color: Colour.blue,
                 text: 'Masukkan Evaluasi',
               ),

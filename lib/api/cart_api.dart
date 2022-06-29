@@ -57,7 +57,7 @@ class CartApi {
     }
   }
 
-  /// Fungsi untuk mengambil data cart berdasarkan id pengguna yang login(murid)
+  /// Fungsi untuk mengambil data cart berdasarkan id pengguna yang login
   getCart() async {
     var url = Uri.parse('$mainUrl/cart-guru/$currentid');
     var response = await http.get(url);

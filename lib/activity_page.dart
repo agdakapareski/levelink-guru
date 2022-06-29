@@ -12,6 +12,7 @@ import 'package:levelink_guru/widget/padded_widget.dart';
 import 'package:provider/provider.dart';
 
 import 'custom_theme.dart';
+import 'detail_riwayat_pertemuan_page.dart';
 import 'model/pertemuan_model.dart';
 
 // TODO: implementasi evaluasi
@@ -64,7 +65,8 @@ class _ActivityPageState extends State<ActivityPage> {
                 ],
               ),
             )
-          : ListView(
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 PaddedWidget(
                   child: Column(
@@ -74,13 +76,7 @@ class _ActivityPageState extends State<ActivityPage> {
                       const SizedBox(
                         height: 10,
                       ),
-                      const Text(
-                        'Aktifitas',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      const SmallerTitleText('AKTIFITAS'),
                       const SizedBox(
                         height: 10,
                       ),
@@ -194,116 +190,123 @@ class _ActivityPageState extends State<ActivityPage> {
                   height: 16,
                 ),
                 const PaddedWidget(
-                  child: Text(
-                    'Riwayat Aktifitas',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  child: SmallerTitleText('RIWAYAT AKTIFITAS'),
                 ),
                 const SizedBox(
                   height: 10,
                 ),
-                ListView.builder(
-                  itemCount:
-                      pertemuanProvider.viewPertemuan.riwayatPertemuan!.length,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    var riwayat = pertemuanProvider
-                        .viewPertemuan.riwayatPertemuan![index];
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: pertemuanProvider
+                        .viewPertemuan.riwayatPertemuan!.length,
+                    shrinkWrap: true,
+                    // physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      var riwayat = pertemuanProvider
+                          .viewPertemuan.riwayatPertemuan![index];
 
-                    return Slidable(
-                      endActionPane: ActionPane(
-                        motion: const DrawerMotion(),
-                        children: [
-                          SlidableAction(
-                            onPressed: (context) {},
-                            backgroundColor: Colour.blue,
-                            foregroundColor: Colors.white,
-                            icon: Icons.list,
-                            label: 'Detail',
-                          ),
-                          SlidableAction(
-                            onPressed: (context) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => EvaluasiPage(
-                                    idPertemuan: riwayat.id!,
-                                  ),
-                                ),
-                              );
-                            },
-                            backgroundColor: Colour.red,
-                            foregroundColor: Colors.white,
-                            icon: Icons.edit,
-                            label: 'Evaluasi',
-                          ),
-                        ],
-                      ),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(color: Colors.grey[200]!),
-                          ),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 10,
-                        ),
-                        child: Column(
+                      return Slidable(
+                        endActionPane: ActionPane(
+                          extentRatio: 0.25,
+                          motion: const DrawerMotion(),
                           children: [
-                            Row(
-                              children: [
-                                Text(
-                                  riwayat.jadwal!.siswa!.nama!,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
+                            SlidableAction(
+                              onPressed: (context) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        DetailRiwayatPertemuanPage(
+                                      riwayat: riwayat,
+                                    ),
                                   ),
-                                ),
-                                const Spacer(),
-                                Text(
-                                  riwayat.jadwal!.kelas!.mataPelajaran!
-                                      .mataPelajaran!,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
+                                );
+                              },
+                              backgroundColor: Colour.blue,
+                              foregroundColor: Colors.white,
+                              icon: Icons.list,
+                              label: 'Detail',
                             ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            Row(
-                              children: [
-                                const Text('Materi :'),
-                                const Spacer(),
-                                Text(riwayat.materi!),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            Row(
-                              children: [
-                                const Text('Durasi :'),
-                                const Spacer(),
-                                Text(
-                                  '${DateFormat('kk:mm').format(
-                                    riwayat.jamMulai!,
-                                  )} - ${DateFormat('kk:mm').format(
-                                    riwayat.jamSelesai!,
-                                  )}',
-                                ),
-                              ],
-                            ),
+                            // SlidableAction(
+                            //   onPressed: (context) {
+                            //     Navigator.push(
+                            //       context,
+                            //       MaterialPageRoute(
+                            //         builder: (context) => EvaluasiPage(
+                            //           idPertemuan: riwayat.id!,
+                            //         ),
+                            //       ),
+                            //     );
+                            //   },
+                            //   backgroundColor: Colour.red,
+                            //   foregroundColor: Colors.white,
+                            //   icon: Icons.edit,
+                            //   label: 'Evaluasi',
+                            // ),
                           ],
                         ),
-                      ),
-                    );
-                  },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border(
+                              bottom: BorderSide(color: Colors.grey[200]!),
+                            ),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 10,
+                          ),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    riwayat.jadwal!.siswa!.nama!,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const Spacer(),
+                                  Text(
+                                    riwayat.jadwal!.kelas!.mataPelajaran!
+                                        .mataPelajaran!,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              Row(
+                                children: [
+                                  const Text('Materi :'),
+                                  const Spacer(),
+                                  Text(riwayat.materi!),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              Row(
+                                children: [
+                                  const Text('Durasi :'),
+                                  const Spacer(),
+                                  Text(
+                                    '${DateFormat('kk:mm').format(
+                                      riwayat.jamMulai!,
+                                    )} - ${DateFormat('kk:mm').format(
+                                      riwayat.jamSelesai!,
+                                    )}',
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ],
             ),
