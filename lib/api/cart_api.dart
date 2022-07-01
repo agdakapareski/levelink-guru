@@ -72,8 +72,10 @@ class CartApi {
         Cart c = Cart(
           id: item['id'],
           siswa: Siswa(
-              id: item['siswa_cart']['id'],
-              nama: item['siswa_cart']['nama_pengguna']),
+            id: item['siswa_cart']['id'],
+            nama: item['siswa_cart']['nama_pengguna'],
+            jenisKelamin: item['siswa_cart']['jenis_kelamin'],
+          ),
           status: item['status'],
         );
 

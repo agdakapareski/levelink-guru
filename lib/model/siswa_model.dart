@@ -1,4 +1,4 @@
-class Siswa{
+class Siswa {
   int? id;
   String? gambar;
   String? nama;
@@ -9,6 +9,7 @@ class Siswa{
   String? alamatKecamatan;
   String? alamatKelurahan;
   String? alamatDetail;
+  String? jenisKelamin;
 
   Siswa({
     this.id,
@@ -21,5 +22,6 @@ class Siswa{
     this.alamatKecamatan,
     this.alamatKelurahan,
     this.alamatDetail,
-});
+    this.jenisKelamin,
+  });
 }

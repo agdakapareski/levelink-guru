@@ -97,6 +97,7 @@ class _ActivityPageState extends State<ActivityPage> {
                                       evaluasi: pertemuan.evaluasi,
                                       capaian: pertemuan.capaian,
                                       isAktif: 0,
+                                      jamSelesai: DateTime.now(),
                                     );
                                     int idPertemuan = pertemuan.id!;
                                     pertemuanProvider.updatePertemuan(
