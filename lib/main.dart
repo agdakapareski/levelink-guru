@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:levelink_guru/providers/pembayaran_provider.dart';
+import 'package:levelink_guru/providers/rating_provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:levelink_guru/splash_screen.dart';
 
@@ -28,6 +29,7 @@ List<SingleChildWidget> providers = [
   ChangeNotifierProvider<PembayaranProvider>(
     create: (_) => PembayaranProvider(),
   ),
+  ChangeNotifierProvider<RatingProvider>(create: (_) => RatingProvider()),
 ];
 
 class MyApp extends StatelessWidget {

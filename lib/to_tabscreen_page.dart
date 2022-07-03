@@ -33,6 +33,7 @@ class _ToTabScreenState extends State<ToTabScreen> {
     prefs.setString('currentalamatKota', currentalamatKota!);
     prefs.setString('currentalamatDetail', currentalamatDetail!);
     prefs.setString('currentjenisKelamin', currentjenisKelamin!);
+    prefs.setDouble('currentRating', currentRating!);
     prefs.setBool('isLogin', isLogin!);
 
     setState(() {});
@@ -60,6 +61,7 @@ class _ToTabScreenState extends State<ToTabScreen> {
         currentalamatKota = user['kota_pengguna'];
         currentalamatDetail = user['alamat_pengguna'];
         currentjenisKelamin = user['jenis_kelamin'];
+        currentRating = double.parse(user['total_rating'].toString());
         isLogin = true;
 
         addToSp();
