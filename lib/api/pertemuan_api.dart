@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 import 'package:levelink_guru/list_data.dart';
 import 'package:levelink_guru/model/kelas_model.dart';
 import 'package:levelink_guru/model/mata_pelajaran_model.dart';
@@ -37,12 +39,18 @@ class PertemuanApi {
     var response = await http.put(
       url,
       headers: {"Content-type": "application/json"},
-      body: jsonEncode({
-        "is_aktif": pertemuan.isAktif,
-        "evaluasi": pertemuan.evaluasi,
-        "capaian": pertemuan.capaian,
-        "jam_selesai": pertemuan.jamSelesai,
-      }),
+      body: pertemuan.jamSelesai != null
+          ? jsonEncode({
+              "is_aktif": pertemuan.isAktif,
+              "evaluasi": pertemuan.evaluasi,
+              "capaian": pertemuan.capaian,
+              "jam_selesai": pertemuan.jamSelesai.toString(),
+            })
+          : jsonEncode({
+              "is_aktif": pertemuan.isAktif,
+              "evaluasi": pertemuan.evaluasi,
+              "capaian": pertemuan.capaian,
+            }),
     );
 
     if (response.statusCode == 200) {
@@ -93,7 +101,9 @@ class PertemuanApi {
             : data['capaian'];
         pertemuan.evaluasi = data['evaluasi'];
         pertemuan.jamMulai = DateTime.parse(data['created_at']);
-        pertemuan.jamSelesai = DateTime.parse(data['jam_selesai']);
+        pertemuan.jamSelesai = data['jam_selesai'] != null
+            ? DateTime.parse(data['jam_selesai'])
+            : DateTime.parse(data['updated_at']);
         viewPertemuan.pertemuanAktif = pertemuan;
       } else {
         viewPertemuan.pertemuanAktif = null;

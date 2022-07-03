@@ -119,13 +119,13 @@ class _ActivityPageState extends State<ActivityPage> {
                                         .siswa!
                                         .id!;
 
-                                    pembayaranProvider.postPembayaran(
-                                      currentid!,
-                                      idSiswa,
-                                      idPertemuan,
-                                      hargaKelas,
-                                      currentid!,
-                                    );
+                                    // pembayaranProvider.postPembayaran(
+                                    //   currentid!,
+                                    //   idSiswa,
+                                    //   idPertemuan,
+                                    //   hargaKelas,
+                                    //   currentid!,
+                                    // );
 
                                     Navigator.pop(context);
                                     Navigator.push(
