@@ -175,14 +175,24 @@ class _DashboardPageState extends State<DashboardPage> {
                             return Slidable(
                               endActionPane: ActionPane(
                                 motion: const DrawerMotion(),
-                                extentRatio: 0.7,
+                                extentRatio: 0.3,
                                 children: [
                                   SlidableAction(
                                     autoClose: false,
                                     onPressed: (context) {
                                       if (jadwal.kelas!.hari == hariIni &&
                                           jadwal.kelas!.jam == jamSekarang) {
-                                        log('jadwal: ${jadwal.kelas!.hari}, ${jadwal.kelas!.jam}\nhari ini: $hariIni, $jamSekarang\nhari dan jam sama');
+                                        Route route = MaterialPageRoute(
+                                          builder: (context) => MulaiKelasPage(
+                                            jadwal: jadwal,
+                                          ),
+                                        );
+
+                                        Navigator.push(
+                                          context,
+                                          route,
+                                        );
+                                        tabProvider.changeScreen(1);
                                       } else {
                                         if (pertemuanProvider
                                                 .viewPertemuan.pertemuanAktif ==
@@ -285,13 +295,13 @@ class _DashboardPageState extends State<DashboardPage> {
                                     icon: Icons.done,
                                     label: 'Mulai Kelas',
                                   ),
-                                  SlidableAction(
-                                    onPressed: (context) {},
-                                    backgroundColor: Colour.red,
-                                    foregroundColor: Colors.white,
-                                    icon: Icons.clear,
-                                    label: 'Akhiri Kelas',
-                                  ),
+                                  // SlidableAction(
+                                  //   onPressed: (context) {},
+                                  //   backgroundColor: Colour.red,
+                                  //   foregroundColor: Colors.white,
+                                  //   icon: Icons.clear,
+                                  //   label: 'Akhiri Kelas',
+                                  // ),
                                 ],
                               ),
                               child: ListTile(

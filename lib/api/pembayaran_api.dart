@@ -47,12 +47,11 @@ class PembayaranApi {
 
     List<Pembayaran> belumBayar = [];
     List<Pembayaran> riwayatBayar = [];
-    List<Tagihan> tagihans = [];
-    List<Tagihan> riwayatTagihan = [];
 
     if (response.statusCode == 200) {
       if (listDataBelumBayar != []) {
         for (var data in listDataBelumBayar) {
+          List<Tagihan> tagihans = [];
           for (var tagihan in data['tagihan']) {
             Tagihan t = Tagihan(
               id: tagihan['id'],
@@ -61,6 +60,8 @@ class PembayaranApi {
                   : tagihan['harga_kelas'],
               pertemuan: Pertemuan(
                 materi: tagihan['pertemuan']['materi'],
+                jamMulai: DateTime.parse(tagihan['pertemuan']['created_at']),
+                jamSelesai: DateTime.parse(tagihan['pertemuan']['updated_at']),
               ),
             );
 
@@ -87,6 +88,7 @@ class PembayaranApi {
 
       if (listDataRiwayatBayar != []) {
         for (var data in listDataRiwayatBayar) {
+          List<Tagihan> riwayatTagihan = [];
           for (var tagihan in data['tagihan']) {
             Tagihan t = Tagihan(
               id: tagihan['id'],
@@ -95,6 +97,8 @@ class PembayaranApi {
                   : tagihan['harga_kelas'],
               pertemuan: Pertemuan(
                 materi: tagihan['pertemuan']['materi'],
+                jamMulai: DateTime.parse(tagihan['pertemuan']['created_at']),
+                jamSelesai: DateTime.parse(tagihan['pertemuan']['updated_at']),
               ),
             );
 

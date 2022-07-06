@@ -5,6 +5,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:levelink_guru/custom_theme.dart';
 import 'package:levelink_guru/list_data.dart';
 import 'package:levelink_guru/login_page.dart';
+import 'package:levelink_guru/mata_pelajaran_page.dart';
 import 'package:levelink_guru/providers/rating_provider.dart';
 import 'package:levelink_guru/widget/padded_widget.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
@@ -60,7 +61,7 @@ class _AccountPageState extends State<AccountPage> {
                   child: Row(
                     children: [
                       CircleAvatar(
-                        radius: 28,
+                        radius: 25,
                         backgroundColor: Colour.blue,
                         child: const Icon(
                           Icons.person,
@@ -123,7 +124,14 @@ class _AccountPageState extends State<AccountPage> {
                 const SizedBox(height: 16),
                 const CustomDivider(),
                 ListTile(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const MataPelajaranPage(),
+                      ),
+                    );
+                  },
                   leading: Icon(
                     Icons.menu_book,
                     color: Colour.blue,
@@ -158,128 +166,141 @@ class _AccountPageState extends State<AccountPage> {
                   ),
                 ),
                 const CustomDivider(),
-                const SizedBox(height: 16),
-                PaddedWidget(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                Expanded(
+                  child: ListView(
                     children: [
-                      Column(
-                        children: [
-                          Text(
-                            ratingProvider.rating.rataRating.toString(),
-                            style: const TextStyle(
-                              fontSize: 38,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          RatingBar.builder(
-                            ignoreGestures: true,
-                            allowHalfRating: true,
-                            initialRating: ratingProvider.rating.rataRating!,
-                            itemBuilder: (context, _) => const Icon(
-                              Icons.star,
-                              color: Colors.amber,
-                            ),
-                            itemSize: 20,
-                            onRatingUpdate: (rating) {},
-                          ),
-                          const SizedBox(height: 3),
-                          Text(
-                            '${ratingProvider.rating.rating!.length} rating',
-                            style: const TextStyle(fontSize: 11),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
+                      const SizedBox(height: 16),
+                      PaddedWidget(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            listSummaryRating(ratingProvider.rating.rating!, 5),
-                            listSummaryRating(ratingProvider.rating.rating!, 4),
-                            listSummaryRating(ratingProvider.rating.rating!, 3),
-                            listSummaryRating(ratingProvider.rating.rating!, 2),
-                            listSummaryRating(ratingProvider.rating.rating!, 1),
+                            Column(
+                              children: [
+                                Text(
+                                  ratingProvider.rating.rataRating.toString(),
+                                  style: const TextStyle(
+                                    fontSize: 38,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                RatingBar.builder(
+                                  ignoreGestures: true,
+                                  allowHalfRating: true,
+                                  initialRating:
+                                      ratingProvider.rating.rataRating!,
+                                  itemBuilder: (context, _) => const Icon(
+                                    Icons.star,
+                                    color: Colors.amber,
+                                  ),
+                                  itemSize: 20,
+                                  onRatingUpdate: (rating) {},
+                                ),
+                                const SizedBox(height: 3),
+                                Text(
+                                  '${ratingProvider.rating.rating!.length} rating',
+                                  style: const TextStyle(fontSize: 11),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Column(
+                                children: [
+                                  listSummaryRating(
+                                      ratingProvider.rating.rating!, 5),
+                                  listSummaryRating(
+                                      ratingProvider.rating.rating!, 4),
+                                  listSummaryRating(
+                                      ratingProvider.rating.rating!, 3),
+                                  listSummaryRating(
+                                      ratingProvider.rating.rating!, 2),
+                                  listSummaryRating(
+                                      ratingProvider.rating.rating!, 1),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 5),
-
-                Expanded(
-                  child: ratingProvider.rating.rating!.isNotEmpty
-                      ? ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: ratingProvider.rating.rating!.length,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 16,
-                                horizontal: 16,
-                              ),
-                              decoration: BoxDecoration(
-                                border: Border(
-                                  bottom: BorderSide(color: Colors.grey[200]!),
-                                ),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
+                      const SizedBox(height: 5),
+                      ratingProvider.rating.rating!.isNotEmpty
+                          ? ListView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: ratingProvider.rating.rating!.length,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 16,
+                                    horizontal: 16,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      bottom:
+                                          BorderSide(color: Colors.grey[200]!),
+                                    ),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      CircleAvatar(
-                                        backgroundColor: Colour.blue,
-                                        child: const Icon(
-                                          Icons.person,
-                                          color: Colors.white,
-                                          size: 18,
-                                        ),
+                                      Row(
+                                        children: [
+                                          CircleAvatar(
+                                            backgroundColor: Colour.blue,
+                                            child: const Icon(
+                                              Icons.person,
+                                              color: Colors.white,
+                                              size: 18,
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            width: 16,
+                                          ),
+                                          Text(ratingProvider.rating
+                                              .rating![index].siswa!.nama!),
+                                          const Spacer(),
+                                          RatingBar.builder(
+                                            ignoreGestures: true,
+                                            allowHalfRating: true,
+                                            initialRating: ratingProvider
+                                                .rating.rating![index].rating!,
+                                            itemBuilder: (context, _) =>
+                                                const Icon(
+                                              Icons.star,
+                                              color: Colors.amber,
+                                            ),
+                                            itemSize: 15,
+                                            onRatingUpdate: (rating) {},
+                                          ),
+                                        ],
                                       ),
                                       const SizedBox(
-                                        width: 16,
+                                        height: 12,
                                       ),
-                                      Text(ratingProvider
-                                          .rating.rating![index].siswa!.nama!),
-                                      const Spacer(),
-                                      RatingBar.builder(
-                                        ignoreGestures: true,
-                                        allowHalfRating: true,
-                                        initialRating: ratingProvider
-                                            .rating.rating![index].rating!,
-                                        itemBuilder: (context, _) => const Icon(
-                                          Icons.star,
-                                          color: Colors.amber,
-                                        ),
-                                        itemSize: 15,
-                                        onRatingUpdate: (rating) {},
+                                      Text(
+                                        ratingProvider
+                                            .rating.rating![index].evaluasi!,
+                                        maxLines: 5,
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.justify,
                                       ),
                                     ],
                                   ),
-                                  const SizedBox(
-                                    height: 12,
-                                  ),
-                                  Text(
-                                    ratingProvider
-                                        .rating.rating![index].evaluasi!,
-                                    maxLines: 5,
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.justify,
-                                  ),
-                                ],
+                                );
+                              },
+                            )
+                          : const ListTile(
+                              title: Text(
+                                'belum ada rating',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                ),
                               ),
-                            );
-                          },
-                        )
-                      : const ListTile(
-                          title: Text(
-                            'belum ada rating',
-                            style: TextStyle(
-                              fontSize: 14,
                             ),
-                          ),
-                        ),
-                ),
+                    ],
+                  ),
+                )
               ],
             ),
     );
