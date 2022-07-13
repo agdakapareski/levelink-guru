@@ -15,7 +15,7 @@ class MataPelajaranApi {
 
     List<MataPelajaranDikuasai> mataPelajarans = [];
 
-    if (response.statusCode == 200) {
+    if (data != null) {
       for (var item in data) {
         var mapel = item['mata_pelajaran'];
         MataPelajaranDikuasai mataPelajaranDikuasai = MataPelajaranDikuasai(
@@ -30,6 +30,8 @@ class MataPelajaranApi {
         mataPelajarans.add(mataPelajaranDikuasai);
       }
 
+      return mataPelajarans;
+    } else {
       return mataPelajarans;
     }
   }

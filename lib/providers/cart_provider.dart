@@ -21,4 +21,10 @@ class CartProvider extends ChangeNotifier {
     transaksi = await CartApi().getCart();
     notifyListeners();
   }
+
+  rejectJadwal(Transaksi t) async {
+    await JadwalApi().rejectJadwal(t);
+    transaksi = await CartApi().getCart();
+    notifyListeners();
+  }
 }

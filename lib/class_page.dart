@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:levelink_guru/add_class_page.dart';
 import 'package:levelink_guru/custom_theme.dart';
+import 'package:levelink_guru/list_data.dart';
+import 'package:levelink_guru/mata_pelajaran_page.dart';
 import 'package:levelink_guru/model/kelas_model.dart';
 import 'package:levelink_guru/providers/kelas_provider.dart';
+import 'package:levelink_guru/providers/mata_pelajaran_provider.dart';
+import 'package:levelink_guru/widget/confirm_dialog.dart';
 import 'package:levelink_guru/widget/padded_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -18,22 +22,62 @@ class _FindPageState extends State<FindPage> {
   @override
   void initState() {
     final kelasProvider = Provider.of<KelasProvider>(context, listen: false);
+    final mataPelajaranProvider =
+        Provider.of<MataPelajaranProvider>(context, listen: false);
     kelasProvider.getDaftarKelas();
+    mataPelajaranProvider.getMataPelajaranDikuasai(currentid!);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final kelasProvider = Provider.of<KelasProvider>(context);
+    final mataPelajaranProvider = Provider.of<MataPelajaranProvider>(context);
     return Scaffold(
       backgroundColor: Colors.white,
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colour.blue,
         onPressed: () {
-          Route route = MaterialPageRoute(
-            builder: (context) => const AddClassPage(),
-          );
-          Navigator.push(context, route);
+          if (mataPelajaranProvider.mataPelajaranDikuasai.isNotEmpty) {
+            Route route = MaterialPageRoute(
+              builder: (context) => const AddClassPage(),
+            );
+            Navigator.push(context, route);
+          } else {
+            confirmDialog(
+              title: 'Belum Ada Mapel',
+              context: context,
+              confirmation: 'Tambah mata pelajaran dikuasai terlebih dahulu',
+              children: [
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      Route route = MaterialPageRoute(
+                        builder: (context) => const MataPelajaranPage(),
+                      );
+
+                      Navigator.push(context, route);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colour.blue,
+                      ),
+                      child: const Center(
+                        child: Text(
+                          'Tambah',
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }
         },
         child: const Icon(Icons.add),
       ),
@@ -74,15 +118,19 @@ class _FindPageState extends State<FindPage> {
                     ),
                   ),
                 ),
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: kelasProvider.kelas.length,
-                  itemBuilder: (context, index) {
-                    Kelas kelas = kelasProvider.kelas[index];
-                    return listKelas(kelas);
-                  },
-                ),
+                kelasProvider.kelas.isEmpty
+                    ? const ListTile(
+                        title: Text('tidak ada kelas'),
+                      )
+                    : ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: kelasProvider.kelas.length,
+                        itemBuilder: (context, index) {
+                          Kelas kelas = kelasProvider.kelas[index];
+                          return listKelas(kelas);
+                        },
+                      ),
               ],
             ),
     );
@@ -98,7 +146,9 @@ listKelas(Kelas kelas) {
     ),
     // isThreeLine: true,
     title: Text(
-      kelas.mataPelajaran!.mataPelajaran!.toUpperCase(),
+      kelas.mataPelajaran!.mataPelajaran!.toUpperCase() +
+          ' ' +
+          kelas.mataPelajaran!.jenjangMataPelajaran!,
       style: const TextStyle(fontSize: 14),
     ),
     subtitle: Text('${kelas.hari!}, ${kelas.jam!}'),

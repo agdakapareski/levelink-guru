@@ -48,23 +48,32 @@ class _MataPelajaranPageState extends State<MataPelajaranPage> {
         backgroundColor: Colour.blue,
         child: const Icon(Icons.add),
       ),
-      body: ListView.builder(
-          itemCount: mataPelajaranProvider.mataPelajaranDikuasai.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              shape: Border(
-                bottom: BorderSide(color: Colors.grey[200]!),
-              ),
-              title: Text(
-                mataPelajaranProvider
-                    .mataPelajaranDikuasai[index].mataPelajaran!.mataPelajaran!,
-              ),
-              trailing: Text(
-                mataPelajaranProvider.mataPelajaranDikuasai[index]
-                    .mataPelajaran!.jenjangMataPelajaran!,
-              ),
-            );
-          }),
+      body: mataPelajaranProvider.mataPelajaranDikuasai.isEmpty
+          ? const ListTile(
+              title: Text('belum ada mata pelajaran dikuasai'),
+            )
+          : ListView.builder(
+              itemCount: mataPelajaranProvider.mataPelajaranDikuasai.length,
+              itemBuilder: (context, index) {
+                // if (mataPelajaranProvider.mataPelajaranDikuasai.isEmpty) {
+                //   return const ListTile(
+                //     title: Text('belum ada mata pelajaran dikuasai'),
+                //   );
+                // }
+                return ListTile(
+                  shape: Border(
+                    bottom: BorderSide(color: Colors.grey[200]!),
+                  ),
+                  title: Text(
+                    mataPelajaranProvider.mataPelajaranDikuasai[index]
+                        .mataPelajaran!.mataPelajaran!,
+                  ),
+                  trailing: Text(
+                    mataPelajaranProvider.mataPelajaranDikuasai[index]
+                        .mataPelajaran!.jenjangMataPelajaran!,
+                  ),
+                );
+              }),
     );
   }
 }

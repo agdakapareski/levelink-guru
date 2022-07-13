@@ -305,7 +305,9 @@ transactionList(CartProvider cartProvider, index) {
         label: 'Accept',
       ),
       SlidableAction(
-        onPressed: (context) {},
+        onPressed: (context) {
+          cartProvider.rejectJadwal(cartProvider.transaksi[index]);
+        },
         backgroundColor: Colour.red,
         foregroundColor: Colors.white,
         icon: Icons.clear,

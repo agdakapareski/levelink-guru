@@ -71,4 +71,26 @@ class JadwalApi {
       log(response.body);
     }
   }
+
+  rejectJadwal(Transaksi transaksi) async {
+    var url = Uri.parse('$mainUrl/reject-jadwal');
+    var response = await http.put(
+      url,
+      headers: {"Content-type": "application/json"},
+      body: jsonEncode({
+        "cart_id": transaksi.cart!.id,
+        "id_kelas": transaksi.kelas!.map((kelas) {
+          return {
+            "id_kelas": kelas.id,
+          };
+        }).toList(),
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      log('reject sukses');
+    } else {
+      log(response.body);
+    }
+  }
 }

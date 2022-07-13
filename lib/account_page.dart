@@ -7,6 +7,7 @@ import 'package:levelink_guru/list_data.dart';
 import 'package:levelink_guru/login_page.dart';
 import 'package:levelink_guru/mata_pelajaran_page.dart';
 import 'package:levelink_guru/providers/rating_provider.dart';
+import 'package:levelink_guru/update_page.dart';
 import 'package:levelink_guru/widget/padded_widget.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
@@ -40,6 +41,21 @@ class _AccountPageState extends State<AccountPage> {
         backgroundColor: Colour.blue,
         foregroundColor: Colors.white,
         elevation: 0,
+        actions: [
+          IconButton(
+            onPressed: () {
+              Route route = MaterialPageRoute(
+                builder: (context) {
+                  return const UpdatePage();
+                },
+              );
+
+              Navigator.push(context, route);
+            },
+            icon: const Icon(Icons.edit),
+            splashRadius: 20,
+          ),
+        ],
       ),
       body: ratingProvider.isLoading
           ? Center(
@@ -88,7 +104,7 @@ class _AccountPageState extends State<AccountPage> {
                 PaddedWidget(
                   child: Row(
                     children: [
-                      const Text('Jenjang : '),
+                      const Text('Pendidikan Terakhir : '),
                       const Spacer(),
                       Text(currentjenjang!),
                     ],
@@ -102,11 +118,11 @@ class _AccountPageState extends State<AccountPage> {
                       const Spacer(),
                       Text(
                         ratingProvider.rating.rataRating! < 3
-                            ? 'kurang bagus, tingkatkan!'
+                            ? 'Kurang bagus, Tingkatkan!'
                             : (ratingProvider.rating.rataRating! >= 3 &&
                                     ratingProvider.rating.rataRating! < 4
-                                ? 'cukup, tingkatkan lagi!'
-                                : 'sangat bagus!, pertahankan!'),
+                                ? 'Cukup, Tingkatkan Lagi!'
+                                : 'Sangat Bagus!, Pertahankan!'),
                       ),
                     ],
                   ),

@@ -1,24 +1,24 @@
-// import 'dart:convert';
-
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:levelink_guru/list_data.dart';
-import 'package:levelink_guru/login_page.dart';
+import 'package:levelink_guru/tab_screen.dart';
 import 'package:levelink_guru/widget/custom_button.dart';
 import 'package:levelink_guru/widget/input_form.dart';
-import 'custom_theme.dart';
-import 'package:http/http.dart' as http;
 
-class RegisterPage extends StatefulWidget {
-  const RegisterPage({Key? key}) : super(key: key);
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'custom_theme.dart';
+
+class UpdatePage extends StatefulWidget {
+  const UpdatePage({Key? key}) : super(key: key);
 
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  State<UpdatePage> createState() => _UpdatePageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _UpdatePageState extends State<UpdatePage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController nameController = TextEditingController();
@@ -29,41 +29,46 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController jenjangController = TextEditingController();
   TextEditingController teleponController = TextEditingController();
 
-  register(
+  update(
     String nama,
-    String email,
-    String password,
-    String role,
     String alamat,
     String kota,
     String provinsi,
     String jenjang,
     String jenisKelamin,
-    String noTelepon,
   ) async {
-    var url = Uri.parse('$mainUrl/register');
-    var response = await http.post(url, body: {
+    var url = Uri.parse('$mainUrl/update-user/$currentid');
+    var response = await http.put(url, body: {
       "nama_pengguna": nama,
-      "email": email,
-      "password": password,
-      "role_pengguna": role,
       "alamat_pengguna": alamat,
       "kota_pengguna": kota,
       "provinsi_pengguna": provinsi,
       "jenjang": jenjang,
       "jenis_kelamin": jenisKelamin,
-      "no_telepon": noTelepon,
-      "total_rating": 0.toString(),
     });
 
     log(response.body);
 
     if (response.statusCode == 200) {
-      Route route = MaterialPageRoute(
-        builder: (context) => const LoginPage(),
-      );
-      // ignore: use_build_context_synchronously
-      Navigator.pushReplacement(context, route);
+      Future<void> addToSp() async {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('currentnama', nama);
+        prefs.setString('currentjenjang', jenjang);
+        prefs.setString('currentalamatProvinsi', provinsi);
+        prefs.setString('currentalamatKota', kota);
+        prefs.setString('currentalamatDetail', alamat);
+        prefs.setString('currentjenisKelamin', jenisKelamin);
+        currentnama = nama;
+        currentjenjang = jenjang;
+        currentalamatProvinsi = provinsi;
+        currentalamatKota = kota;
+        currentalamatDetail = alamat;
+        currentjenisKelamin = jenisKelamin;
+
+        setState(() {});
+      }
+
+      addToSp();
     }
   }
 
@@ -81,6 +86,18 @@ class _RegisterPageState extends State<RegisterPage> {
   String? selectedJenisKelamin;
 
   @override
+  void initState() {
+    nameController.text = currentnama!;
+    provinsiController.text = currentalamatProvinsi!;
+    kotaController.text = currentalamatKota!;
+    detailController.text = currentalamatDetail!;
+    jenjangController.text = currentjenjang!;
+
+    selectedJenisKelamin = currentjenisKelamin!;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
@@ -96,7 +113,7 @@ class _RegisterPageState extends State<RegisterPage> {
             vertical: screenWidth * 0.04,
           ),
           children: [
-            const TitleText('Register Akun'),
+            const TitleText('Update Akun'),
             SizedBox(
               height: screenHeight * 0.025,
             ),
@@ -108,36 +125,6 @@ class _RegisterPageState extends State<RegisterPage> {
               labelText: 'nama lengkap',
               controller: nameController,
               textCapitalization: TextCapitalization.words,
-            ),
-            SizedBox(
-              height: titleGap,
-            ),
-            InputForm(
-              labelText: 'email',
-              hintText: 'email',
-              controller: emailController,
-            ),
-
-            SizedBox(
-              height: titleGap,
-            ),
-
-            // InputForm(
-            //   labelText: 'kelas',
-            //   controller: kelasController,
-            // ),
-            InputForm(
-              labelText: 'password',
-              controller: passwordController,
-            ),
-            SizedBox(
-              height: titleGap,
-            ),
-            InputForm(
-              labelText: 'telepon',
-              prefix: const Text('+62'),
-              controller: teleponController,
-              keyboardType: TextInputType.number,
             ),
             SizedBox(
               height: titleGap,
@@ -193,7 +180,6 @@ class _RegisterPageState extends State<RegisterPage> {
             SizedBox(
               height: titleGap,
             ),
-
             SizedBox(
               height: verticalGap,
             ),
@@ -219,7 +205,6 @@ class _RegisterPageState extends State<RegisterPage> {
             SizedBox(
               height: titleGap,
             ),
-
             SizedBox(
               height: titleGap,
             ),
@@ -234,47 +219,24 @@ class _RegisterPageState extends State<RegisterPage> {
               height: verticalGap,
             ),
             CustomButton(
-              text: 'Daftar',
+              text: 'Update',
               color: Colour.blue,
               onTap: () {
-                // Route route = MaterialPageRoute(
-                //   builder: (context) => const LoginPage(),
-                // );
-                // Navigator.pushReplacement(context, route);
-                register(
+                update(
                   nameController.text,
-                  emailController.text,
-                  passwordController.text,
-                  'guru',
                   detailController.text,
                   kotaController.text,
                   provinsiController.text,
                   jenjangController.text,
                   selectedJenisKelamin!,
-                  teleponController.text,
-                );
+                ).then((value) => Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const TabScreen(),
+                      ),
+                      (route) => false,
+                    ));
               },
-            ),
-            SizedBox(
-              height: verticalGap,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text('Sudah punya akun?'),
-                GestureDetector(
-                  onTap: () {
-                    Route route = MaterialPageRoute(
-                      builder: (context) => const LoginPage(),
-                    );
-                    Navigator.pushReplacement(context, route);
-                  },
-                  child: Text(
-                    ' Login',
-                    style: TextStyle(color: Colour.red),
-                  ),
-                ),
-              ],
             ),
             SizedBox(
               height: verticalGap,

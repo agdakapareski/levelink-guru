@@ -40,6 +40,8 @@ class Kelas {
       mataPelajaran: MataPelajaran(
         id: json['mata_pelajaran_kelas']['id'],
         mataPelajaran: json['mata_pelajaran_kelas']['nama_mata_pelajaran'],
+        jenjangMataPelajaran: json['mata_pelajaran_kelas']
+            ['jenjang_mata_pelajaran'],
       ),
       isTambah: true,
     );
