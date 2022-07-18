@@ -39,4 +39,11 @@ class KelasProvider extends ChangeNotifier {
     kelas = await KelasApi().getKelas();
     notifyListeners();
   }
+
+  updateKelas(Kelas k) async {
+    await KelasApi().updateKelas(k);
+
+    kelas = await KelasApi().getKelas();
+    notifyListeners();
+  }
 }

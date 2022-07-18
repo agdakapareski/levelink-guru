@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:levelink_guru/custom_theme.dart';
 import 'package:levelink_guru/list_data.dart';
+import 'package:levelink_guru/model/kelas_model.dart';
 import 'package:levelink_guru/model/mata_pelajaran_model.dart';
 import 'package:levelink_guru/providers/kelas_provider.dart';
 import 'package:levelink_guru/widget/custom_button.dart';
@@ -20,7 +21,13 @@ extension TimeOfDayConverter on TimeOfDay {
 }
 
 class AddClassPage extends StatefulWidget {
-  const AddClassPage({Key? key}) : super(key: key);
+  final bool? isEditing;
+  final Kelas? kelas;
+  const AddClassPage({
+    Key? key,
+    this.isEditing,
+    this.kelas,
+  }) : super(key: key);
 
   @override
   State<AddClassPage> createState() => _AddClassPageState();
@@ -64,11 +71,20 @@ class _AddClassPageState extends State<AddClassPage> {
 
   @override
   void initState() {
-    getMataPelajaran(currentid!).then((value) {
-      setState(() {
-        listMapelDikuasai = value;
+    if (widget.isEditing!) {
+      selectedMapel =
+          '${widget.kelas!.mataPelajaran!.mataPelajaran!} ${widget.kelas!.mataPelajaran!.jenjangMataPelajaran!}';
+      hargaController.text = widget.kelas!.harga.toString();
+      jamController.text = widget.kelas!.jam!;
+      hariController.text = widget.kelas!.hari!;
+    } else {
+      getMataPelajaran(currentid!).then((value) {
+        setState(() {
+          listMapelDikuasai = value;
+        });
       });
-    });
+    }
+
     super.initState();
   }
 
@@ -79,9 +95,9 @@ class _AddClassPageState extends State<AddClassPage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colour.blue,
-        title: const Text(
-          'TAMBAH KELAS',
-          style: TextStyle(
+        title: Text(
+          widget.isEditing! ? 'UPDATE KELAS' : 'TAMBAH KELAS',
+          style: const TextStyle(
             color: Colors.white,
           ),
         ),
@@ -185,7 +201,7 @@ class _AddClassPageState extends State<AddClassPage> {
           ),
           CustomButton(
             color: Colour.blue,
-            text: 'Buat Kelas',
+            text: widget.isEditing! ? 'Update Kelas' : 'Buat Kelas',
             onTap: () {
               for (var item in kelasProvider.kelas) {
                 if (item.hari == hariController.text &&
@@ -204,12 +220,22 @@ class _AddClassPageState extends State<AddClassPage> {
                   return;
                 }
               }
-              kelasProvider.storeKelas(
-                int.parse(selectedMapel!),
-                hariController.text,
-                selectedTime.to24hours(),
-                int.parse(hargaController.text),
-              );
+              if (widget.isEditing!) {
+                Kelas kelasData = Kelas(
+                  id: widget.kelas!.id,
+                  harga: double.parse(hargaController.text),
+                  jam: selectedTime.to24hours(),
+                  hari: hariController.text,
+                );
+                kelasProvider.updateKelas(kelasData);
+              } else {
+                kelasProvider.storeKelas(
+                  int.parse(selectedMapel!),
+                  hariController.text,
+                  selectedTime.to24hours(),
+                  int.parse(hargaController.text),
+                );
+              }
               Navigator.pop(context);
             },
           ),

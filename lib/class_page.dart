@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:levelink_guru/add_class_page.dart';
@@ -40,7 +42,9 @@ class _FindPageState extends State<FindPage> {
         onPressed: () {
           if (mataPelajaranProvider.mataPelajaranDikuasai.isNotEmpty) {
             Route route = MaterialPageRoute(
-              builder: (context) => const AddClassPage(),
+              builder: (context) => const AddClassPage(
+                isEditing: false,
+              ),
             );
             Navigator.push(context, route);
           } else {
@@ -128,7 +132,7 @@ class _FindPageState extends State<FindPage> {
                         itemCount: kelasProvider.kelas.length,
                         itemBuilder: (context, index) {
                           Kelas kelas = kelasProvider.kelas[index];
-                          return listKelas(kelas);
+                          return listKelas(context, kelas);
                         },
                       ),
               ],
@@ -137,8 +141,21 @@ class _FindPageState extends State<FindPage> {
   }
 }
 
-listKelas(Kelas kelas) {
+listKelas(BuildContext context, Kelas kelas) {
   return ListTile(
+    onTap: () {
+      if (kelas.isPenuh == 0) {
+        Route route = MaterialPageRoute(
+          builder: (context) => AddClassPage(
+            isEditing: true,
+            kelas: kelas,
+          ),
+        );
+        Navigator.push(context, route);
+      } else {
+        log('kelas penuh');
+      }
+    },
     shape: const Border(
       bottom: BorderSide(
         color: Color(0xFFEEEEEE),
@@ -146,9 +163,7 @@ listKelas(Kelas kelas) {
     ),
     // isThreeLine: true,
     title: Text(
-      kelas.mataPelajaran!.mataPelajaran!.toUpperCase() +
-          ' ' +
-          kelas.mataPelajaran!.jenjangMataPelajaran!,
+      '${kelas.mataPelajaran!.mataPelajaran!.toUpperCase()} ${kelas.mataPelajaran!.jenjangMataPelajaran!}',
       style: const TextStyle(fontSize: 14),
     ),
     subtitle: Text('${kelas.hari!}, ${kelas.jam!}'),

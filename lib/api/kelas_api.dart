@@ -48,4 +48,23 @@ class KelasApi {
       log(response.body);
     }
   }
+
+  updateKelas(Kelas kelas) async {
+    var url = Uri.parse('$mainUrl/update-kelas/${kelas.id}');
+    var response = await http.put(
+      url,
+      headers: {"Content-type": "application/json"},
+      body: jsonEncode({
+        "hari": kelas.hari,
+        "jam": kelas.jam,
+        "harga": kelas.harga,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      log('update kelas sukses');
+    } else {
+      log(response.body);
+    }
+  }
 }
